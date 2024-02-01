@@ -1,0 +1,49 @@
+class Vertex {
+  constructor (array) {
+    this.coord = { x: array[0], y: array[1] };
+    this.neighbors = this.identifyNeighbors();
+  }
+
+  identifyNeighbors () {
+    let possibleMoves = [ 
+      [-1, 2], [1, 2], 
+      [2, 1], [2, -1],
+      [1, -2], [-1, -2], 
+      [-2, 1], [-2, -1] 
+    ];
+    let neighbors = [];
+    possibleMoves.forEach((move) => {
+      let newX = this.coord.x + move[0];
+      let newY = this.coord.y + move[1];
+      // checking if out of bounds
+      if ((newX > 7 || newX < 0 || newY > 7 || newY < 0) === false) {
+        // if not create new edge
+        if (newX !== this.coord.x && newY !== this.coord.y) {
+          neighbors.push(JSON.stringify([ newX, newY ]));
+        }
+        
+      }
+    });
+    return neighbors;
+  }
+}
+
+function knightTravails (root, destination, depth = 1, parent = null) {
+  // only an string until we go there. this should save memory
+  let rootObj = new Vertex(root);
+  // stringified for easier checking
+  let strDestination = JSON.stringify(destination);
+  if (rootObj.neighbors.includes(strDestination)) {
+    return depth;
+  } 
+  rootObj.neighbors.forEach((neighbor) => {
+    let parsedNeighbor = JSON.parse(neighbor);
+    console.log(parsedNeighbor);
+    //knightTravails(parsedNeighbor, destination, depth + 1, rootObj);
+  });
+}
+
+// let newVertex = new Vertex([3, 3]);
+// console.log(newVertex.edges);
+
+console.log(knightTravails([0, 0], [2, 2]));
